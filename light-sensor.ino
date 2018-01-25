@@ -1,20 +1,3 @@
-/*
- ---------------
- D4    ->   S0 (A)
- D3    ->   S1 (B)
- D2    ->   S2 (C)
- A0    ->   Common
- 3.3v  ->   VCC
- G     ->   GND
- G     ->   Inhibit
- G     ->   VEE  
- 
- 4051 Option pins are then wired to whatever Analog sensors required
- One thing to note: say for example if you only require 2 analog sensors,
- You can just wire up S0(A) and connect S1 & S2 to GND and you will be 
- able to switch between option 1 and option 2 pins.
- Same goes for up to 4 pins (just use S0 & S1)
-*/
 
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
@@ -23,16 +6,20 @@
 #include <ESP8266mDNS.h>
 
 
-const char* ssid = "xxxx";
-const char* password = "xxxx";
+const char* ssid = "Unknown2";
+const char* password = "Bethany123";
 
-const char* accessoryName = "daikin-thermostat";
+const char* accessoryName = "light-sever";
 
-#define MUX_A D4
-#define MUX_B D3
-#define MUX_C D2
+#define BED_1 D1
+#define BED_2 D3
+#define BED_3 D2
+#define BED_4 D2
+#define BATHROOM D2
+#define LANDING D2
 
-#define ANALOG_INPUT A0
+
+#define ANALOG_PIN A0
 
 
 void setup() {
@@ -63,43 +50,47 @@ delay(1000);
     Serial.println("MDNS responder started");
   }
 
-  //Deifne output pins for Mux
-  pinMode(MUX_A, OUTPUT);
-  pinMode(MUX_B, OUTPUT);     
-  pinMode(MUX_C, OUTPUT);     
+  //Define  pins to output voltage only
+  pinMode(BED_1, OUTPUT);
+  pinMode(BED_2, OUTPUT);
+  pinMode(BED_3, OUTPUT);
+  pinMode(BED_4, OUTPUT);
+  pinMode(BATHROOM, OUTPUT);
+  pinMode(LANDING, OUTPUT);
 }
 
-void changeMux(int c, int b, int a) {
-  digitalWrite(MUX_A, a);
-  digitalWrite(MUX_B, b);
-  digitalWrite(MUX_C, c);
+void changeMux(int a, int b, int c, int d, int e, int f) {
+  digitalWrite(BED_1, a);
+  digitalWrite(BED_2, b);
+  digitalWrite(BED_3, c);
+  digitalWrite(BED_4, d);
+  digitalWrite(BATHROOM, e);
+  digitalWrite(LANDING, f);
 }
 
 void loop() {
   float value;
-  
-  changeMux(LOW, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 0 pin of Mux
-  
-  changeMux(LOW, LOW, HIGH);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 1 pin of Mux
-  
-  changeMux(LOW, HIGH, LOW);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 2 pin of Mux
 
-  changeMux(LOW, HIGH, HIGH);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 3 pin of Mux
+  changeMux(LOW, LOW, LOW, LOW, LOW, LOW);
+  value = analogRead(ANALOG_INPUT); //All pins off
 
-  changeMux(HIGH, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 4 pin of Mux
+  changeMux(HIGH, LOW, LOW, LOW, LOW, LOW);
+  value = analogRead(ANALOG_INPUT); // BED_1 read
 
-  changeMux(HIGH, LOW, HIGH);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 5 pin of Mux
+  changeMux(LOW, HIGH, LOW, LOW, LOW, LOW);
+  value = analogRead(ANALOG_INPUT); // BED_2 read
 
-  changeMux(HIGH, HIGH, LOW);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 6 pin of Mux
+  changeMux(LOW, LOW, HIGH, LOW, LOW, LOW);
+  value = analogRead(ANALOG_INPUT); // BED_3 read
 
-  changeMux(HIGH, HIGH, HIGH);
-  value = analogRead(ANALOG_INPUT); //Value of the sensor connected Option 7 pin of Mux
-  
+  changeMux(LOW, LOW, LOW, HIGH, LOW, LOW);
+  value = analogRead(ANALOG_INPUT); // BED_4 read
+
+  changeMux(LOW, LOW, LOW, LOW, HIGH, LOW);
+  value = analogRead(ANALOG_INPUT); // BATHROOM read
+
+  changeMux(LOW, LOW, LOW, LOW, LOW, HIGH);
+  value = analogRead(ANALOG_INPUT); // LANDING read
+
 }
+
