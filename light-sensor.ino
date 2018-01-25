@@ -71,26 +71,11 @@ delay(1000);
     server.send(200, "text/html", "ok");
   });
 
-  /* GET /daikin
-     Content-Type: application/json
-  */
   server.on("/lights", HTTP_GET, []() {
     sendCors();
     server.send(200, "application/json", ac.toJson());
   });
 
-  /* POST /daikin
-     Content-Type: application/json
-     {
-       "targetMode": "heat",
-       "targetFanSpeed": "auto",
-       "targetTemperature": 23,
-       "swingVertical": true,
-       "swingHorizontal": false,
-       "powerful": false,
-       "quiet": true
-     }
-  */
   server.on("/lights", HTTP_POST, []() {
     /* Parse the json body into the "body" variable */
     DynamicJsonBuffer jsonBuffer;
