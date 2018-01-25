@@ -22,6 +22,26 @@ const char* accessoryName = "light-sever";
 #define ANALOG_PIN A0
 
 
+String toJson() {
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+
+  root["currentTemperature"] = getCurrentTemperature();
+  root["currentHumidity"] = getCurrentHumidity();
+  root["targetMode"] = targetMode;
+  root["targetFanSpeed"] = targetFanSpeed;
+  root["targetTemperature"] = targetTemperature;
+  root["verticalSwing"] = verticalSwing;
+  root["horizontalSwing"] = horizontalSwing;
+  root["quietMode"] = quietMode;
+  root["powerfulMode"] = powerfulMode;
+
+  String res;
+  root.printTo(res);
+
+  return res;
+}
+
 void setup() {
 
 delay(1000);
@@ -69,28 +89,47 @@ void changeMux(int a, int b, int c, int d, int e, int f) {
 }
 
 void loop() {
-  float value;
+
+  float readPin;
 
   changeMux(LOW, LOW, LOW, LOW, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); //All pins off
+  readPin = analogRead(ANALOG_PIN); // All pins off
 
-  changeMux(HIGH, LOW, LOW, LOW, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); // BED_1 read
+  float getBed1Light() {
+    changeMux(HIGH, LOW, LOW, LOW, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BED_1 read
+    return bed1Light;
+  }
 
-  changeMux(LOW, HIGH, LOW, LOW, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); // BED_2 read
+  float getBed2Light() {
+    changeMux(LOW, HIGH, LOW, LOW, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BED_2 read
+    return bed2Light;
+  }
 
-  changeMux(LOW, LOW, HIGH, LOW, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); // BED_3 read
+  float getBed3Light() {
+    changeMux(LOW, LOW, HIGH, LOW, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BED_3 read
+    return bed3Light;
+  }
 
-  changeMux(LOW, LOW, LOW, HIGH, LOW, LOW);
-  value = analogRead(ANALOG_INPUT); // BED_4 read
+  float getBed4Light() {
+    changeMux(LOW, LOW, LOW, HIGH, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BED_4 read
+    return bed4Light;
+  }
 
-  changeMux(LOW, LOW, LOW, LOW, HIGH, LOW);
-  value = analogRead(ANALOG_INPUT); // BATHROOM read
+  float getBathroomLight() {
+    changeMux(LOW, LOW, LOW, HIGH, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BATHROOM read
+    return BathroomLight;
+  }
 
-  changeMux(LOW, LOW, LOW, LOW, LOW, HIGH);
-  value = analogRead(ANALOG_INPUT); // LANDING read
+  float getLandingLight() {
+    changeMux(LOW, LOW, LOW, HIGH, LOW, LOW);
+    readPin = analogRead(ANALOG_PIN); // BATHROOM read
+    return LandingLight;
+  }
 
 }
 
