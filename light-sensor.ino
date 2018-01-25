@@ -12,11 +12,11 @@ const char* password = "Bethany123";
 const char* accessoryName = "light-sever";
 
 #define BED_1 D1
-#define BED_2 D3
-#define BED_3 D2
-#define BED_4 D2
-#define BATHROOM D2
-#define LANDING D2
+#define BED_2 D2
+#define BED_3 D3
+#define BED_4 D4
+#define BATHROOM D5
+#define LANDING D6
 
 
 #define ANALOG_PIN A0
