@@ -115,7 +115,6 @@ void loop() {
   float bed2Light; // BED_2 read
     changePins(LOW, HIGH, LOW, LOW, LOW, LOW);
     bed2Light = analogRead(ANALOG_PIN);
-    lightCalc(readPin)
     return bed2Light;
 
   float bed3Light; // BED_3 read
